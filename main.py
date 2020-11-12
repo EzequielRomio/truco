@@ -72,15 +72,10 @@ class Player:
 		self.name = name
 
 
-cards_img = pygame.image.load('images/cards.png')
-
-cropped = pygame.Surface((80, 80))
-cropped.blit(cards_img, (0,0), (30, 30, 80, 80))
 
 def main():
 	screen = pygame.display.set_mode((640, 480))
 	pygame.display.set_caption("Truco!")
-	screen.blit(cropped, (300, 240))
 	
 	player_1 = Player()
 	player_2 = Player()
@@ -120,4 +115,5 @@ def main():
 		break
 
 if __name__ == '__main__':
+	pygame.init()
 	main()
