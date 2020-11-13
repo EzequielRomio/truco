@@ -138,7 +138,7 @@ def main():
 			
 			
 			pygame.display.flip()
-			time.sleep(4)
+			
 				
 			player_1.show_cards()
 			print(player_1.envido_score)
@@ -167,7 +167,10 @@ def main():
 					# player1.hand[0]
 					print('card 1')
 					time.sleep(1)
-					
+					#img = pygame.transform.smoothscale(cards_imges[0], (2*100, 2*200))
+					#screen.blit(img, (220, 540))
+					#time.sleep(1)
+
 				elif mouse_pos[0] in list(range(440, 640)) and mouse_pos[1] in list(range(540, 1000)):
 					# player1.hand[1]
 					print('card 2')
@@ -177,6 +180,8 @@ def main():
 					# player1.hand[2]
 					print('card 3')
 					time.sleep(1)
+		
+			pygame.display.flip()
 					
 
 if __name__ == '__main__':
