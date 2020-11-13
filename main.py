@@ -1,16 +1,17 @@
 import random
 import sys
+import time
 
 import cards
 
 import pygame
+from pygame.locals import *
 
 
 def get_hands():
-	p1 = random.choices([k for k in cards.cards_dict.keys()], k=6)
-	
-	p1 = [cards.Card(p1[ix]) for ix in range(6)]
-	
+	cards_list = [k for k in cards.cards_dict.keys()]
+
+	p1 = [cards.Card(cards_list.pop(random.randint(0, len(cards_list)-1))) for _ in range(6)]
 	p2 = [p1.pop(1) for _ in range(3)]
 	
 	return p1, p2
@@ -39,7 +40,23 @@ def calculate_envido_score(hand):
 			cards_scores[card.symbol] -= card.number
 			
 	return max(cards_scores.values())
-		
+
+def load_image(filename, transparent=False):
+	try: 
+		image = pygame.image.load(filename)
+	except pygame.error:
+		raise SystemExit('No se pudo cargar la imagen')
+  	
+	image = image.convert()
+	#convierte la imagen al tipo interno de Pygame 
+	#que hace que sea mucho más eficiente
+	if transparent:
+		color = image.get_at((0,0)) # obtiene el color a transparentar en el pixel x=0,y=0 (sup, izquierda)
+		image.set_colorkey(color, RLEACCEL) #lo hace transparente
+	return image
+
+
+
 first_round_menu = """
 Elige una carta:
 1 - {}
@@ -71,10 +88,18 @@ class Player:
 	def set_name(self, name):
 		self.name = name
 
+class Board:
+	def __init__(self):
+		self.bg = None
+		self.cards = []
+
+	def set_cards_images(self, card_image):
+		self.cards.append(card_image)
+
 
 
 def main():
-	screen = pygame.display.set_mode((640, 480))
+	screen = pygame.display.set_mode((1920, 1080))
 	pygame.display.set_caption("Truco!")
 	
 	player_1 = Player()
@@ -92,7 +117,24 @@ def main():
 			player_1.set_envido_score()
 			player_2.set_hand(p2)
 			player_2.set_envido_score()
-		
+			
+			cards_imges = [load_image(c.image) for c in player_1.hand]
+			card_back = [load_image('images/back.png') for _ in range(len(player_2.hand))]
+
+			x_coord = 0
+			for img in cards_imges:
+				x_coord += 220
+				screen.blit(img, (x_coord, 540))
+			
+			x_coord = 0
+			for img in card_back:
+				x_coord += 220
+				screen.blit(img, (x_coord, 40))
+			
+			
+			pygame.display.flip()
+			time.sleep(4)
+				
 			player_1.show_cards()
 			print(player_1.envido_score)
 			player_2.show_cards()

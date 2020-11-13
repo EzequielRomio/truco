@@ -49,7 +49,8 @@ class Card:
 		self.score = cards_dict[name]
 		self.number = None
 		self.symbol = None
-		
+		self.image = 'images/' + self.name.replace(' ', '_') + '.png'
+
 		self.set_number_and_symbol()
 		
 	def set_number_and_symbol(self):
