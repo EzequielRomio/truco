@@ -99,9 +99,14 @@ class Board:
 
 
 def main():
+	game_over = False
 	screen = pygame.display.set_mode((1920, 1080))
 	pygame.display.set_caption("Truco!")
-	
+	pygame.mixer.music.load('music_01.mp3')
+	pygame.mixer.music.play(-1) # -1 hace que sea loop infinito
+	#solo un sonido => x = pygame.mixer.Sound('sonido.mp3') 
+
+
 	player_1 = Player()
 	player_2 = Player()
 	
@@ -110,7 +115,7 @@ def main():
 	
 	first_round = True
 	
-	while True:
+	while not game_over:
 		if first_round:
 			p1, p2 = get_hands()	
 			player_1.set_hand(p1)
@@ -139,7 +144,7 @@ def main():
 			print(player_1.envido_score)
 			player_2.show_cards()
 			print(player_2.envido_score)
-			
+			"""
 			move = input('Cantar envido?\ny = si, n = no\n')
 			if move != 'y':
 				move = input(first_round_menu.format(player_1.hand[0].name, player_1.hand[1].name, player_1.hand[2].name))
@@ -149,12 +154,30 @@ def main():
 				cards_on_board.append(player_1.drop_card(move))
 				
 				cards_on_board.append(player_2.drop_card(move))
+			"""	
+			first_round = False
+
+		for event in pygame.event.get():
+			if event.type == pygame.QUIT:
+				exit()
+
+			elif event.type == pygame.MOUSEMOTION:
+				mouse_pos = pygame.mouse.get_pos()
+				if mouse_pos[0] in list(range(220, 410)) and mouse_pos[1] in list(range(540, 1000)):			
+					# player1.hand[0]
+					print('card 1')
+					time.sleep(1)
+					
+				elif mouse_pos[0] in list(range(440, 640)) and mouse_pos[1] in list(range(540, 1000)):
+					# player1.hand[1]
+					print('card 2')
+					time.sleep(1)
 				
-				
-			
-			
-		
-		break
+				elif mouse_pos[0] in list(range(660, 780)) and mouse_pos[1] in list(range(540, 1000)):
+					# player1.hand[2]
+					print('card 3')
+					time.sleep(1)
+					
 
 if __name__ == '__main__':
 	pygame.init()
