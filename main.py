@@ -96,16 +96,34 @@ class Board:
 	def set_cards_images(self, card_image):
 		self.cards.append(card_image)
 
+def set_screen(screen):
+	pygame.display.set_caption("Truco!")
+	pygame.mixer.music.load('music_01.mp3')
+	pygame.mixer.music.play(-1) # -1 hace que sea loop infinito
+	#solo un sonido => x = pygame.mixer.Sound('sonido.mp3')
+	menu_bg = load_image('images/back.png')
+	menu_bg.set_alpha(128)
 
+	screen.blit(menu_bg, (1290, 450))
+
+	smallfont = pygame.font.SysFont('Cinzel Black',25) 
+	envido_button = smallfont.render('Envido' , True , (255, 255, 0))
+	screen.blit(envido_button, (1300, 500))
+
+	smallfont = pygame.font.SysFont('Cinzel Black',25) 
+	envido_button = smallfont.render('Truco' , True , (255, 255, 0))
+	screen.blit(envido_button, (1300, 560))
+
+	smallfont = pygame.font.SysFont('Cinzel Black',25) 
+	envido_button = smallfont.render('Irse al Mazo' , True , (255, 255, 0))
+	screen.blit(envido_button, (1300, 620))
+	
 
 def main():
 	game_over = False
 	screen = pygame.display.set_mode((1920, 1080))
-	pygame.display.set_caption("Truco!")
-	pygame.mixer.music.load('music_01.mp3')
-	pygame.mixer.music.play(-1) # -1 hace que sea loop infinito
-	#solo un sonido => x = pygame.mixer.Sound('sonido.mp3') 
 
+	set_screen(screen)
 
 	player_1 = Player()
 	player_2 = Player()
@@ -123,11 +141,11 @@ def main():
 			player_2.set_hand(p2)
 			player_2.set_envido_score()
 			
-			cards_imges = [load_image(c.image) for c in player_1.hand]
+			cards_images = [load_image(c.image) for c in player_1.hand]
 			card_back = [load_image('images/back.png') for _ in range(len(player_2.hand))]
 
 			x_coord = 0
-			for img in cards_imges:
+			for img in cards_images:
 				x_coord += 220
 				screen.blit(img, (x_coord, 540))
 			
@@ -167,8 +185,12 @@ def main():
 					# player1.hand[0]
 					print('card 1')
 					time.sleep(1)
+					cards_images[0].set_alpha(128)
+					
+					
 					#img = pygame.transform.smoothscale(cards_imges[0], (2*100, 2*200))
-					#screen.blit(img, (220, 540))
+					screen.blit(cards_images[0], (220, 540))
+					pygame.display.flip()
 					#time.sleep(1)
 
 				elif mouse_pos[0] in list(range(440, 640)) and mouse_pos[1] in list(range(540, 1000)):
@@ -186,4 +208,5 @@ def main():
 
 if __name__ == '__main__':
 	pygame.init()
+	pygame.font.init()
 	main()
